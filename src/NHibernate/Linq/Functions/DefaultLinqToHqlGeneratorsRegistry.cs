@@ -31,7 +31,7 @@ namespace NHibernate.Linq.Functions
 			this.Merge(new IndexOfGenerator());
 			this.Merge(new ReplaceGenerator());
 			this.Merge(new LengthGenerator());
-            this.Merge(new TrimGenerator());
+			this.Merge(new TrimGenerator());
 
 			this.Merge(new AnyHqlGenerator());
 			this.Merge(new AllHqlGenerator());
@@ -40,6 +40,8 @@ namespace NHibernate.Linq.Functions
 			this.Merge(new CollectionContainsGenerator());
 
 			this.Merge(new DateTimePropertiesHqlGenerator());
+
+			this.Merge(new ConvertStringGenerator());
 		}
 
 		protected bool GetRuntimeMethodGenerator(MethodInfo method, out IHqlGeneratorForMethod methodGenerator)
