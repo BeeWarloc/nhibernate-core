@@ -49,6 +49,9 @@ namespace NHibernate.Linq.Visitors
 			// Move OrderBy clauses to end
 			MoveOrderByToEndRewriter.ReWrite(queryModel);
 
+			// Unwrap orderby clauses wrapped in new Anonymous class
+			UnwrapOrderByExpressionFromAnonClassRewriter.ReWrite(queryModel);
+
 			// rewrite any operators that should be applied on the outer query
 			// by flattening out the sub-queries that they are located in
 			ResultOperatorRewriterResult result = ResultOperatorRewriter.Rewrite(queryModel);
