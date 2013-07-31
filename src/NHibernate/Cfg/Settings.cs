@@ -6,6 +6,7 @@ using NHibernate.Cache;
 using NHibernate.Connection;
 using NHibernate.Exceptions;
 using NHibernate.Hql;
+using NHibernate.Linq;
 using NHibernate.Linq.Functions;
 using NHibernate.Transaction;
 
@@ -124,6 +125,8 @@ namespace NHibernate.Cfg
 		/// Get the registry to provide Hql-Generators for known properties/methods.
 		/// </summary>
 		public ILinqToHqlGeneratorsRegistry LinqToHqlGeneratorsRegistry { get; internal set; }
+
+		public ICustomHqlTransformer CustomHqlTransformer { get; internal set; }
 
 		#endregion
 	}

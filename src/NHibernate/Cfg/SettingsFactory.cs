@@ -52,6 +52,21 @@ namespace NHibernate.Cfg
 			}
 			settings.Dialect = dialect;
 
+			string customHqlTransformerTypeName;
+			if (properties.TryGetValue(Environment.CustomHqlTransformer, out customHqlTransformerTypeName))
+			{
+				try
+				{
+					log.Info("Initializing CustomHqlTransformer: " + customHqlTransformerTypeName);
+					settings.CustomHqlTransformer = (ICustomHqlTransformer)Environment.BytecodeProvider.ObjectsFactory.CreateInstance(ReflectHelper.ClassForName(customHqlTransformerTypeName));
+				}
+				catch (Exception e)
+				{
+					log.Fatal("Could not instantiate CustomHqlTransformer", e);
+					throw new HibernateException("Could not instantiate CustomHqlTransformer: " + customHqlTransformerTypeName, e);
+				}
+			}
+
 			settings.LinqToHqlGeneratorsRegistry = LinqToHqlGeneratorsRegistryFactory.CreateGeneratorsRegistry(properties);
 
 			#region SQL Exception converter

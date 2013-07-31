@@ -165,7 +165,9 @@ namespace NHibernate.Cfg
 		public const string DefaultBatchFetchSize = "default_batch_fetch_size";
 
 		public const string CollectionTypeFactoryClass = "collectiontype.factory_class";
-		
+
+		public const string CustomHqlTransformer = "linqtohql.customhqltransformer";
+
 		public const string LinqToHqlGeneratorsRegistry = "linqtohql.generatorsregistry";
 
 		/// <summary> Enable ordering of insert statements for the purpose of more effecient batching.</summary>

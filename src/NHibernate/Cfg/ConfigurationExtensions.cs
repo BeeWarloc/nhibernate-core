@@ -52,6 +52,12 @@ namespace NHibernate.Cfg
 			return configuration;
 		}
 
+		public static Configuration CustomHqlTransformer<TCustomHqlTransformer>(this Configuration configuration) where TCustomHqlTransformer : ICustomHqlTransformer
+		{
+			configuration.SetProperty(Environment.CustomHqlTransformer, typeof(TCustomHqlTransformer).AssemblyQualifiedName);
+			return configuration;
+		}
+
 		public static Configuration CurrentSessionContext<TCurrentSessionContext>(this Configuration configuration) where TCurrentSessionContext : ICurrentSessionContext
 		{
 			configuration.SetProperty(Environment.CurrentSessionContextClass, typeof(TCurrentSessionContext).AssemblyQualifiedName);

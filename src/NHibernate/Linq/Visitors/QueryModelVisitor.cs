@@ -62,7 +62,13 @@ namespace NHibernate.Linq.Visitors
 			var visitor = new QueryModelVisitor(parameters, root, queryModel) { RewrittenOperatorResult = result };
 			visitor.Visit();
 
-			return visitor._hqlTree.GetTranslation();
+			var translation = visitor._hqlTree.GetTranslation();
+			if (parameters.SessionFactory.Settings.CustomHqlTransformer != null)
+			{
+				parameters.SessionFactory.Settings.CustomHqlTransformer.Transform(translation.Statement);
+			}
+
+			return translation;
 		}
 
 		private readonly IntermediateHqlTree _hqlTree;

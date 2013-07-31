@@ -79,6 +79,8 @@ namespace NHibernate.Hql.Ast
 			_node.ClearChildren();
 		}
 
+		public string Text { get { return _node.Text; } }
+
 		protected void SetText(string text)
 		{
 			_node.Text = text;
@@ -89,7 +91,7 @@ namespace NHibernate.Hql.Ast
 			get { return _node; }
 		}
 
-		internal void AddChild(HqlTreeNode child)
+		public void AddChild(HqlTreeNode child)
 		{
 			if ((child is HqlExpressionSubTreeHolder) || (child is HqlDistinctHolder))
 			{
@@ -712,6 +714,15 @@ namespace NHibernate.Hql.Ast
 		}
 	}
 
+	public class HqlLeftJoinWith : HqlTreeNode
+	{
+		public HqlLeftJoinWith(IASTFactory factory, HqlExpression expression, HqlAlias @alias, HqlExpression with)
+			: base(
+				HqlSqlWalker.JOIN, "join", factory, new HqlLeft(factory), expression, @alias, new HqlWith(factory, with))
+		{
+		}
+	}
+
 	public class HqlLeftJoin : HqlTreeNode
 	{
 		public HqlLeftJoin(IASTFactory factory, HqlExpression expression, HqlAlias @alias) : base(HqlSqlWalker.JOIN, "join", factory, new HqlLeft(factory), expression, @alias)
@@ -762,6 +773,14 @@ namespace NHibernate.Hql.Ast
 	{
 		public HqlBitwiseAnd(IASTFactory factory, HqlExpression lhs, HqlExpression rhs)
 			: base(HqlSqlWalker.BAND, "band", factory, lhs, rhs)
+		{
+		}
+	}
+
+	public class HqlWith : HqlTreeNode
+	{
+		public HqlWith(IASTFactory factory, HqlExpression expression)
+			: base(HqlSqlWalker.WITH, "with", factory, expression)
 		{
 		}
 	}
