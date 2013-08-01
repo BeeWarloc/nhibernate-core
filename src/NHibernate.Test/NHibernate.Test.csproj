@@ -506,6 +506,7 @@
     <Compile Include="Linq\CasingTest.cs" />
     <Compile Include="Linq\CharComparisonTests.cs" />
     <Compile Include="Linq\CollectionAssert.cs" />
+    <Compile Include="Linq\LinqToHqlTreeNodeVisitorTests.cs" />
     <Compile Include="Linq\LoggingTests.cs" />
     <Compile Include="Linq\QueryTimeoutTests.cs" />
     <Compile Include="Linq\DateTimeTests.cs" />
