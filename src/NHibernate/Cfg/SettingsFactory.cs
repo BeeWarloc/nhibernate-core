@@ -53,12 +53,12 @@ namespace NHibernate.Cfg
 			settings.Dialect = dialect;
 
 			string customHqlTransformerTypeName;
-			if (properties.TryGetValue(Environment.CustomHqlTransformer, out customHqlTransformerTypeName))
+			if (properties.TryGetValue(Environment.LinqToHqlTreeNodeVisitor, out customHqlTransformerTypeName))
 			{
 				try
 				{
 					log.Info("Initializing CustomHqlTransformer: " + customHqlTransformerTypeName);
-					settings.CustomHqlTransformer = (ICustomHqlTransformer)Environment.BytecodeProvider.ObjectsFactory.CreateInstance(ReflectHelper.ClassForName(customHqlTransformerTypeName));
+					settings.LinqToHqlTreeNodeVisitor = (ILinqToHqlTreeNodeVisitor)Environment.BytecodeProvider.ObjectsFactory.CreateInstance(ReflectHelper.ClassForName(customHqlTransformerTypeName));
 				}
 				catch (Exception e)
 				{

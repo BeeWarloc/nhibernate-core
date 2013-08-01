@@ -166,7 +166,7 @@ namespace NHibernate.Cfg
 
 		public const string CollectionTypeFactoryClass = "collectiontype.factory_class";
 
-		public const string CustomHqlTransformer = "linqtohql.customhqltransformer";
+		public const string LinqToHqlTreeNodeVisitor = "linqtohql.treenodevisitor";
 
 		public const string LinqToHqlGeneratorsRegistry = "linqtohql.generatorsregistry";
 

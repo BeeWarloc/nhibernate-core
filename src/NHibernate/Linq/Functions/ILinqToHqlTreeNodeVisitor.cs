@@ -2,8 +2,8 @@
 
 namespace NHibernate.Linq.Functions
 {
-	public interface ICustomHqlTransformer
+	public interface ILinqToHqlTreeNodeVisitor
 	{
-		void Transform(HqlTreeNode hqlTree);
+		void Visit(HqlTreeNode hqlTree);
 	}
 }

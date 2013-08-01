@@ -52,9 +52,9 @@ namespace NHibernate.Cfg
 			return configuration;
 		}
 
-		public static Configuration CustomHqlTransformer<TCustomHqlTransformer>(this Configuration configuration) where TCustomHqlTransformer : ICustomHqlTransformer
+		public static Configuration CustomHqlTransformer<TCustomHqlTransformer>(this Configuration configuration) where TCustomHqlTransformer : ILinqToHqlTreeNodeVisitor
 		{
-			configuration.SetProperty(Environment.CustomHqlTransformer, typeof(TCustomHqlTransformer).AssemblyQualifiedName);
+			configuration.SetProperty(Environment.LinqToHqlTreeNodeVisitor, typeof(TCustomHqlTransformer).AssemblyQualifiedName);
 			return configuration;
 		}
 

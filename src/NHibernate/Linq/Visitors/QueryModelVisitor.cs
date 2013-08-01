@@ -63,9 +63,9 @@ namespace NHibernate.Linq.Visitors
 			visitor.Visit();
 
 			var translation = visitor._hqlTree.GetTranslation();
-			if (parameters.SessionFactory.Settings.CustomHqlTransformer != null)
+			if (parameters.SessionFactory.Settings.LinqToHqlTreeNodeVisitor != null)
 			{
-				parameters.SessionFactory.Settings.CustomHqlTransformer.Transform(translation.Statement);
+				parameters.SessionFactory.Settings.LinqToHqlTreeNodeVisitor.Visit(translation.Statement);
 			}
 
 			return translation;

@@ -126,7 +126,7 @@ namespace NHibernate.Cfg
 		/// </summary>
 		public ILinqToHqlGeneratorsRegistry LinqToHqlGeneratorsRegistry { get; internal set; }
 
-		public ICustomHqlTransformer CustomHqlTransformer { get; internal set; }
+		public ILinqToHqlTreeNodeVisitor LinqToHqlTreeNodeVisitor { get; internal set; }
 
 		#endregion
 	}
