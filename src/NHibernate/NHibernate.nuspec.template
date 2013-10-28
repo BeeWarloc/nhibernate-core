@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <package>
   <metadata>
-    <id>NHibernate</id>
+    <id>NHibernate-okb</id>
     <version>x.y.z</version>
     <authors>NHibernate community, Hibernate community</authors>
     <summary>
@@ -9,6 +9,7 @@
     </summary>
     <description>
       NHibernate is a mature, open source object-relational mapper for the .NET framework. It is actively developed, fully featured and used in thousands of successful projects.
+	  This is a modified version of Nhibernate with ability to visit HQL tree after Linq-to-hql conversion.
     </description>
     <language>en-US</language>
     <tags>ORM, DataBase, DAL, ObjectRelationalMapping</tags>
@@ -17,7 +18,7 @@
       <dependency id="Iesi.Collections" version="[3.2,4)" />
     </dependencies>
 	<projectUrl>
-		http://www.nhforge.org
+		https://github.com/okb/nhibernate-core/tree/hql-transformer-extension-point
 	</projectUrl>
 	<iconUrl>https://raw.github.com/nhibernate/nhibernate-core/3.3.x/logo/NHibernate-NuGet.png</iconUrl>
 	<licenseUrl>https://raw.github.com/nhibernate/nhibernate-core/3.3.x/lgpl.txt</licenseUrl>
