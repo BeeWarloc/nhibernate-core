@@ -1,8 +1,10 @@
+using System;
 using System.Data;
 using System.Data.Common;
 using System.Text;
 using NHibernate.Dialect.Function;
 using NHibernate.Dialect.Schema;
+using NHibernate.SqlCommand;
 using NHibernate.Util;
 using Environment = NHibernate.Cfg.Environment;
 
@@ -53,6 +55,18 @@ namespace NHibernate.Dialect
 			RegisterFunction("month", new SQLFunctionTemplate(NHibernateUtil.Int32, "datepart(month, ?1)"));
 			RegisterFunction("year", new SQLFunctionTemplate(NHibernateUtil.Int32, "datepart(year, ?1)"));
 
+			RegisterFunction("length", new StandardSQLFunction("len", NHibernateUtil.Int32));
+			RegisterFunction("locate", new StandardSQLFunction("charindex", NHibernateUtil.Int32));
+			RegisterFunction("replace", new StandardSafeSQLFunction("replace", NHibernateUtil.String, 3));
+			RegisterFunction("rtrim", new StandardSQLFunction("rtrim"));
+			RegisterFunction("ltrim", new StandardSQLFunction("ltrim"));
+			RegisterFunction("upper", new StandardSQLFunction("upper"));
+			RegisterFunction("lower", new StandardSQLFunction("lower"));
+
+			RegisterFunction("trim", new AnsiTrimEmulationFunction());
+
+			RegisterFunction("concat", new VarArgsSQLFunction(NHibernateUtil.String, "(", "+", ")"));
+
 			DefaultProperties[Environment.ConnectionDriver] = "NHibernate.Driver.SqlServerCeDriver";
 			DefaultProperties[Environment.PrepareSql] = "false";
 		}
@@ -99,7 +113,7 @@ namespace NHibernate.Dialect
 
 		public override bool SupportsLimit
 		{
-			get { return false; }
+			get { return true; }
 		}
 
 		public override bool SupportsLimitOffset
@@ -115,6 +129,17 @@ namespace NHibernate.Dialect
 		public override IDataBaseSchema GetDataBaseSchema(DbConnection connection)
 		{
 			return new MsSqlCeDataBaseSchema(connection);
+		}
+
+		public override SqlString GetLimitString(SqlString querySqlString, SqlString offset, SqlString limit)
+		{
+			var top = new SqlStringBuilder()
+				.Add(" top (")
+				.Add(limit)
+				.Add(")")
+				.ToSqlString();
+
+			return querySqlString.Insert(GetAfterSelectInsertPoint(querySqlString), top);
 		}
 
         public override string Qualify(string catalog, string schema, string table)
@@ -162,5 +187,18 @@ namespace NHibernate.Dialect
                 name = OpenQuote + name + CloseQuote;
             return qualifiedName.Append(name).ToString();
         }
-    }
+
+		private static int GetAfterSelectInsertPoint(SqlString sql)
+		{
+			if (sql.StartsWithCaseInsensitive("select distinct"))
+			{
+				return 15;
+			}
+			if (sql.StartsWithCaseInsensitive("select"))
+			{
+				return 6;
+			}
+			throw new NotSupportedException("The query should start with 'SELECT' or 'SELECT DISTINCT'");
+		}
+	}
 }

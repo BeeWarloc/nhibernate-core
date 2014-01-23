@@ -68,7 +68,7 @@ namespace NHibernate.AdoNet
 			{
 				if (transaction != null && transaction.IsActive)
 					return true;
-				return session.Factory.TransactionFactory.IsInDistributedActiveTransaction(session);
+				return Factory.TransactionFactory.IsInDistributedActiveTransaction(session);
 			}
 		}
 
@@ -153,37 +153,26 @@ namespace NHibernate.AdoNet
 			CloseConnection();
 		}
 
-		public IDbConnection Disconnect() {
-            if (IsInActiveTransaction)
-                throw  new InvalidOperationException("Disconnect cannot be called while a transaction is in progress.");
-			try
+		public IDbConnection Disconnect()
+		{
+			if (IsInActiveTransaction)
+				throw new InvalidOperationException("Disconnect cannot be called while a transaction is in progress.");
+
+			if (!ownConnection)
 			{
-				if (!ownConnection)
-				{
-					return DisconnectSuppliedConnection();
-				}
-				else
-				{
-					DisconnectOwnConnection();
-					ownConnection = false;
-					return null;
-				}
+				return DisconnectSuppliedConnection();
 			}
-			finally
+			else
 			{
-				// Ensure that AfterTransactionCompletion gets called since
-				// it takes care of the locks and cache.
-				if (!IsInActiveTransaction)
-				{
-					// We don't know the state of the transaction
-					session.AfterTransactionCompletion(false, null);
-				}
+				DisconnectOwnConnection();
+				ownConnection = false;
+				return null;
 			}
 		}
 
 		private void CloseConnection()
 		{
-			session.Factory.ConnectionProvider.CloseConnection(connection);
+			Factory.ConnectionProvider.CloseConnection(connection);
 			connection = null;
 		}
 
@@ -193,10 +182,10 @@ namespace NHibernate.AdoNet
 			{
 				if (ownConnection)
 				{
-					connection = session.Factory.ConnectionProvider.GetConnection();
-					if (session.Factory.Statistics.IsStatisticsEnabled)
+					connection = Factory.ConnectionProvider.GetConnection();
+					if (Factory.Statistics.IsStatisticsEnabled)
 					{
-						session.Factory.StatisticsImplementor.Connect();
+						Factory.StatisticsImplementor.Connect();
 					}
 				}
 				else if (session.IsOpen)
@@ -308,7 +297,7 @@ namespace NHibernate.AdoNet
 
 		void IDeserializationCallback.OnDeserialization(object sender)
 		{
-			batcher = session.Factory.Settings.BatcherFactory.CreateBatcher(this, interceptor);
+			batcher = Factory.Settings.BatcherFactory.CreateBatcher(this, interceptor);
 		}
 
 		#endregion
@@ -331,7 +320,7 @@ namespace NHibernate.AdoNet
 			{
 				if (transaction == null)
 				{
-					transaction = session.Factory.TransactionFactory.CreateTransaction(session);
+					transaction = Factory.TransactionFactory.CreateTransaction(session);
 				}
 				return transaction;
 			}
@@ -340,7 +329,6 @@ namespace NHibernate.AdoNet
 		public void AfterNonTransactionalQuery(bool success)
 		{
 			log.Debug("after autocommit");
-			session.AfterTransactionCompletion(success, null);
 		}
 
 		private bool IsAfterTransactionRelease
